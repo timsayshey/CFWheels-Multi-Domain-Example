@@ -1,0 +1,1 @@
+<cfset set(URLRewriting="Partial")>
