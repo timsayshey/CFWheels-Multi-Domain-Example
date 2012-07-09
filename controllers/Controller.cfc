@@ -10,30 +10,29 @@ component extends="Wheels"
 	public any function init()
 	{
 		// Sets currentSite and activeSite for every request
-		filters(through="setActiveSite"); 
-		
-		// Sets currentView for every request
-		filters(through="setCurrentView", type="after");		
+		filters(through="setActiveSite"); 			
 		
 		// Sets the layout based on current site (activeSite)
-		usesLayout("setLayout"); 			
-	}		
+		usesLayout("setLayout");					
+	}	
 	
 	/**
-	* @hint Sets the current view based on folders
-	*/ 
-	public any function setCurrentView() 
+	* @hint Overrides the default renderpage function to check for views
+	*/
+	function renderPage(string template="") 
 	{	
 		if (FileExists(ExpandPath('/multiwheels/views/#params.activeSiteAbrv#/#params.action#.cfm'))) 
-		{
-			renderPage(template='/#params.activeSiteAbrv#/#params.action#');			
+		{			
+			arguments.template = "/#params.activeSiteAbrv#/#params.action#";					
 		} 
 		else if (FileExists(ExpandPath('/multiwheels/views/#params.action#.cfm'))) 
-		{
-			renderPage(template='/#params.action#');				
-		}		
-	}
+		{			
+			arguments.template = "/#params.action#";		
+		}	
 		
+		super.renderPage(argumentCollection=arguments);
+	}	
+	
 	/**
 	* @hint Sets the layout to the current company layout
 	*/ 
@@ -94,20 +93,5 @@ component extends="Wheels"
 		//writeDump(params); abort;
 	}
 	
-	/**
-	* @hint Overrides default renderPage
-	*/
-	/*
-	public any function renderPage(string template="")
-	{		
-		if(not Len(arguments.template)) {		
-			arguments.template = "/#params.activeSiteAbrv#/#params.action#";			
-		}
-		
-		//writeDump(arguments); abort;
-		
-		renderPage(argumentCollection=arguments);		
-	}
-	*/	
 }
 </cfscript>
